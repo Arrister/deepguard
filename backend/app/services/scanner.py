@@ -1,4 +1,9 @@
-from scapy.all import ARP, Ether, srp
+try:
+    from scapy.all import ARP, Ether, srp
+    SCAPY_AVAILABLE = True
+except Exception:
+    SCAPY_AVAILABLE = False
+
 from sqlalchemy.sql import func
 import asyncio
 from app.models.device import Device
@@ -37,6 +42,10 @@ class NetworkScanner:
         """
         Scan the network using ARP requests to find active devices.
         """
+        if not SCAPY_AVAILABLE:
+            print("Scapy not available (cloud environment) — skipping network scan.")
+            return []
+
         if self.is_scanning_now:
             print("Scan already in progress, skipping...")
             return []

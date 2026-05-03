@@ -1,6 +1,15 @@
 import asyncio
 import time
-from scapy.all import sniff, IP, TCP, UDP, ICMP
+try:
+    from scapy.all import sniff, IP, TCP, UDP, ICMP
+    SCAPY_AVAILABLE = True
+except Exception:
+    SCAPY_AVAILABLE = False
+    # Define dummy classes so the rest of the code doesn't break
+    class IP: pass
+    class TCP: pass
+    class UDP: pass
+    class ICMP: pass
 from app.services.ml_engine import ml_engine
 from app.services.signature_engine import signature_engine
 from app.models.log import Log
@@ -302,6 +311,9 @@ class NetworkSniffer:
     
     def start_sniffing(self, interface=None, packet_count=0):
         """Start packet sniffing"""
+        if not SCAPY_AVAILABLE:
+            print("Scapy not available (cloud environment) — sniffer disabled.")
+            return
         print(f"Starting HYBRID AI-IDS sniffer...")
         self.running = True
         
