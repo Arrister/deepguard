@@ -26,7 +26,7 @@ app.add_middleware(SecurityHeadersMiddleware)
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://deepguard-production-ddd1.up.railway.app","*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
